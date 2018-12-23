@@ -29,10 +29,10 @@ class GPIO(KeyboardAbstractBaseClass):
         OPiGPIO.setwarnings(False)
 
         section_name = conf_pre+'keyboard'+conf_post
-        if doorpi.DoorPi().config.get(section_name, 'mode', "BOARD").upper() == "BOARD":
-            OPiGPIO.setmode(OPiGPIO.BOARD)
-        else:
-            OPiGPIO.setmode(OPiGPIO.SUNXI)
+        if doorpi.DoorPi().config.get(section_name, 'mode', "BOARD").upper() != "BOARD":
+            logger.warning('only mode BOARD is supported')
+            
+        OPiGPIO.setmode(OPiGPIO.BOARD)
 
         # No pull_up_down support on Orange PI zero        
         try:
