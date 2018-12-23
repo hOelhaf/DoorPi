@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.debug("%s loaded", __name__)
 
-import RPi.GPIO as RPiGPIO # basic for GPIO control
+import OPi.GPIO as OPiGPIO # basic for GPIO control
 from doorpi.keyboard.AbstractBaseClass import KeyboardAbstractBaseClass, HIGH_LEVEL, LOW_LEVEL
 import doorpi
 
@@ -26,35 +26,26 @@ class GPIO(KeyboardAbstractBaseClass):
         self._OutputPins = map(int, output_pins)
         self._pressed_on_key_down = pressed_on_key_down
 
-        RPiGPIO.setwarnings(False)
+        OPiGPIO.setwarnings(False)
 
         section_name = conf_pre+'keyboard'+conf_post
         if doorpi.DoorPi().config.get(section_name, 'mode', "BOARD").upper() == "BOARD":
-            RPiGPIO.setmode(RPiGPIO.BOARD)
+            OPiGPIO.setmode(OPiGPIO.BOARD)
         else:
-            RPiGPIO.setmode(RPiGPIO.BCM)
+            OPiGPIO.setmode(OPiGPIO.SUNXI)
 
-        # issue 134
-        pull_up_down = doorpi.DoorPi().config.get(section_name, 'pull_up_down', "PUD_OFF").upper()
-        if pull_up_down == "PUD_DOWN":
-            pull_up_down = RPiGPIO.PUD_DOWN
-        elif pull_up_down == "PUD_UP":
-            pull_up_down = RPiGPIO.PUD_UP
-        else:
-            pull_up_down = RPiGPIO.PUD_OFF
-
-        # issue #133
+        # No pull_up_down support on Orange PI zero        
         try:
-            RPiGPIO.setup(self._InputPins, RPiGPIO.IN, pull_up_down=pull_up_down)
+            OPiGPIO.setup(self._InputPins, OPiGPIO.IN)
         except TypeError:
             logger.warning('you use an old version of GPIO library - fallback to single-register of input pins')
             for input_pin in self._InputPins:
-                RPiGPIO.setup(input_pin, RPiGPIO.IN, pull_up_down=pull_up_down)
+                OPiGPIO.setup(input_pin, OPiGPIO.IN)
 
         for input_pin in self._InputPins:
-            RPiGPIO.add_event_detect(
+            OPiGPIO.add_event_detect(
                 input_pin,
-                RPiGPIO.BOTH,
+                OPiGPIO.BOTH,
                 callback=self.event_detect,
                 bouncetime=int(bouncetime)
             )
@@ -62,11 +53,11 @@ class GPIO(KeyboardAbstractBaseClass):
 
         # issue #133
         try:
-            RPiGPIO.setup(self._OutputPins, RPiGPIO.OUT)
+            OPiGPIO.setup(self._OutputPins, OPiGPIO.OUT)
         except TypeError:
             logger.warning('you use an old version of GPIO library - fallback to single-register of input pins')
             for output_pin in self._OutputPins:
-                RPiGPIO.setup(output_pin, RPiGPIO.OUT)
+                OPiGPIO.setup(output_pin, OPiGPIO.OUT)
 
         # use set_output to register status @ dict self._OutputStatus
         for output_pin in self._OutputPins:
@@ -82,7 +73,7 @@ class GPIO(KeyboardAbstractBaseClass):
         # shutdown all output-pins
         for output_pin in self._OutputPins:
             self.set_output(output_pin, 0, False)
-        RPiGPIO.cleanup()
+        OPiGPIO.cleanup()
         doorpi.DoorPi().event_handler.unregister_source(__name__, True)
         self.__destroyed = True
 
@@ -98,9 +89,9 @@ class GPIO(KeyboardAbstractBaseClass):
 
     def status_input(self, pin):
         if self._polarity is 0:
-            return str(RPiGPIO.input(int(pin))).lower() in HIGH_LEVEL
+            return str(OPiGPIO.input(int(pin))).lower() in HIGH_LEVEL
         else:
-            return str(RPiGPIO.input(int(pin))).lower() in LOW_LEVEL
+            return str(OPiGPIO.input(int(pin))).lower() in LOW_LEVEL
 
     def set_output(self, pin, value, log_output=True):
         parsed_pin = doorpi.DoorPi().parse_string("!"+str(pin)+"!")
@@ -118,6 +109,6 @@ class GPIO(KeyboardAbstractBaseClass):
         if log_output:
             logger.debug("out(pin = %s, value = %s, log_output = %s)", pin, value, log_output)
 
-        RPiGPIO.output(pin, value)
+        OPiGPIO.output(pin, value)
         self._OutputStatus[pin] = value
         return True
