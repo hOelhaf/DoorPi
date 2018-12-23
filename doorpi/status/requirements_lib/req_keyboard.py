@@ -89,24 +89,6 @@ Wobei !BASEPATH! für das Home-Verzeichnis von DoorPi steht (meistens "/home/Doo
         dict( section = '[KeyboardName]_OutputPins', key = '*', type = 'string', default = '', mandatory = False, description = 'Auflistung der Eingabeschnittstellen im Format <code>[PinName] = [SprechenderPinName]</code> - z.B. gibt es den GPIO Ausgang 27 für den Türöffner, so wäre die Syntax <code>27 = Tueroeffner</code>. Umlaute und Sonderzeichen sollten vermieden werden!')
     ],
     libraries = { # nicht als dict(), da es sonst Probleme mit dem Punkt in RPi.GPIO als Key gibt
-        'pifacedigitalio': dict(
-            text_warning =          '''Neben der reinen Installation vom Python-Modul pifacedigitalio ist es auch wichtig SPI am System zu aktivieren (siehe Links).
-Außerdem muss bei Bestellungen darauf geachtet werden, dass es zwei Versionen gibt (<a href="https://www.rasppishop.de/Piface-Digital-Erweiterung-fuer-Raspberry-Pi">PiFace digital 1</a> und <a href="https://www.rasppishop.de/PiFace-Digital-2-Erweiterungsplatine-/-Modul-fuer-den-Raspberry-Pi-Modell-B-">PiFace digital 2</a>)''',
-            text_description =      'Das Python-Modul pifacedigitalio ist der "Treiber" für die PiFace Hardware.',
-            text_installation =     '',
-            auto_install =          False,
-            text_test =             'Der Status kann gestestet werden, in dem im Python-Interpreter <code>import pifacedigitalio</code> eingeben wird.',
-            text_configuration =    '',
-            configuration = [
-                #dict( section = 'DoorPi', key = 'eventlog', type = 'string', default = '!BASEPATH!/conf/eventlog.db', mandatory = False, description = 'Ablageort der SQLLite Datenbank für den Event-Handler.')
-            ],
-            text_links = {
-                'docs.python.org': 'https://docs.python.org/2.7/library/configparser.html',
-                'PiFace Beschreibung auf piface.org.uk': 'http://www.piface.org.uk/products/piface_digital/',
-                'Installationsanleitung auf github': 'http://piface.github.io/pifacedigitalio/installation.html',
-                'SPI und I2C aktivieren': 'http://raspberry.tips/faq/raspberry-pi-spi-und-i2c-aktivieren/'
-            }
-        ),
         'OPi.GPIO': dict(
             text_warning =          '',
             text_description =      'OPi.GPIO kümmert sich um die Ein- und Ausgaben der GPIO Schnittstelle',
