@@ -1,5 +1,5 @@
 requests >= 2.7.0
-OPi.GPIO >= 0.5.11
+OPi.GPIO >= 0.3.5
 pyserial >= 2.7
 watchdog >= 0.8.3
 picamera >= 1.10
