@@ -107,12 +107,12 @@ Außerdem muss bei Bestellungen darauf geachtet werden, dass es zwei Versionen g
                 'SPI und I2C aktivieren': 'http://raspberry.tips/faq/raspberry-pi-spi-und-i2c-aktivieren/'
             }
         ),
-        'RPi.GPIO': dict(
+        'OPi.GPIO': dict(
             text_warning =          '',
-            text_description =      'RPi.GPIO kümmert sich um die Ein- und Ausgaben der GPIO Schnittstelle eines Raspberry Pi.',
+            text_description =      'OPi.GPIO kümmert sich um die Ein- und Ausgaben der GPIO Schnittstelle',
             text_installation =     'Die Installation ist sehr gut <a href="http://sourceforge.net/p/raspberry-gpio-python/wiki/install/">auf Sourceforge</a> beschrieben.',
             auto_install =          False,
-            text_test =             'Der Status kann gestestet werden, in dem im Python-Interpreter <code>import RPi.GPIO</code> eingeben wird.',
+            text_test =             'Der Status kann gestestet werden, in dem im Python-Interpreter <code>import OPi.GPIO</code> eingeben wird.',
             text_configuration =    '',
             configuration = [
                 #dict( section = 'DoorPi', key = 'eventlog', type = 'string', default = '!BASEPATH!/conf/eventlog.db', mandatory = False, description = 'Ablageort der SQLLite Datenbank für den Event-Handler.')
